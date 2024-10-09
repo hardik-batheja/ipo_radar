@@ -16,6 +16,7 @@ def extractor(showme = False):
    allot = "https://www.moneycontrol.com/ipo/"
    chrome_options = Options()
    chrome_options.add_argument("--headless")  # Use headless mode
+   chrome_options.add_argument("--disable-gpu")
    chrome_options.add_argument("--no-sandbox")  # Required by some cloud services
    chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
 
