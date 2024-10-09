@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 import time
 # pip install python-Levenshtein
 # pip install fuzzywuzzy
@@ -13,8 +14,12 @@ from fuzzywuzzy import fuzz
 
 def extractor(showme = False):
    allot = "https://www.moneycontrol.com/ipo/"
+   chrome_options = Options()
+   chrome_options.add_argument("--headless")  # Use headless mode
+   chrome_options.add_argument("--no-sandbox")  # Required by some cloud services
+   chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
 
-   driver = webdriver.Chrome()  # Replace with your preferred browser driver
+   driver = webdriver.Chrome(options=chrome_options)  # Use headless Chrome
    driver.get(allot)
 
    # Find the button element using its containing div
