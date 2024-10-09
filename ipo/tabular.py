@@ -61,16 +61,17 @@ def extractor(showme = False):
       dfx = pd.DataFrame(columns = ['Company', 'Price', 'GMP', 'Gain(%)', 'Date', 'Type'])
       for row in rows[1:]:
          row = row.find_all('td')
-         dfx.loc[len(dfx)] = [row[0].text.title(), row[2].text[1:].strip(), row[1].text, pd.to_numeric(row[3].text[:-1].replace('-','0')), row[4].text, row[5].text]
+         comp_temp,type_temp = row[0].text.split(" (")
+         dfx.loc[len(dfx)] = [comp_temp.title(), row[2].text[1:].strip(), row[1].text, pd.to_numeric(row[3].text[:-1].replace('-','0')), row[4].text, type_temp.rstrip(")")]
       dfx['Type'] = dfx['Type'].replace({"Mainline":"Main","NSE SME":"SME","BSE SME":"SME"})
 
       rows = tables[1].find_all('tr')
       dfx2 = pd.DataFrame(columns = ['Company', 'Sauda'])
       for row in rows[1:]:
          row = row.find_all('td')
-         dfx2.loc[len(dfx2)] = [row[0].text.title(), row[2].text]
+         dfx2.loc[len(dfx2)] = [row[0].text.split(" (")[0].title(), row[2].text]
       
-      dfx = pd.merge(dfx, dfx2, on = "Company")
+      dfx = pd.merge(dfx, dfx2, on = "Company", how="outer")
       dfx = dfx.sort_values(by=['Type', 'Gain(%)'], ascending=[True, False]).reset_index(drop=True)
       # print (dfx)
 
@@ -87,4 +88,4 @@ def extractor(showme = False):
       print("Status Code:", response.status_code)
    return dfx
 
-# extractor(True)
+#extractor(True)
