@@ -58,34 +58,38 @@
           <th>Date</th>
           <th>Type</th>
           <th>Sauda</th>
-          <th>Allotment</th>
           <th>Qty</th>
           <th>QI</th>
           <th>RI</th>
           <th>NI</th>
+          <th>SHNI</th>
+          <th>BHNI</th>
           <th>Total Subs</th>
+          <th>Closing</th>
         </tr>
       </thead>
       <tbody>
         {% for company in companies %}
         <tr>
           <td class="sticky-col">{{ company.companies }}</td>
-          <td>{{ company.price }}</td>
+          <td>₹{{ company.price }}</td>
           <td>{{ company.gmp }}</td>
           <td>{{ company.gain }}%</td>
           <td>{{ company.date }}</td>
           <td>{{ company.type }}</td>
           <td>{{ company.sauda }}</td>
-          <td>{{ company.allotment }}</td>
           <td>{{ company.qty }}</td>
           <td>{{ company.qi }}</td>
           <td>{{ company.ri }}</td>
           <td>{{ company.ni }}</td>
+          <td>{{ company.shni }}</td>
+          <td>{{ company.bhni }}</td>
           <td>{{ company.total_sub }}</td>
+          <td>{{ company.closing }}</td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="18">No companies found.</td>
+          <td colspan="16">No companies found.</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -105,19 +109,19 @@
           <th>Sauda</th>
         </tr>
       </thead>
-      {% for company in past %}
+      {% for company in partial %}
       <tr>
         <td class="sticky-col">{{ company.companies }}</td>
-        <td>{{ company.price }}</td>
-        <td>{{ company.gmp }}</td>
-        <td>{{ company.gain }}%</td>
-        <td>{{ company.date }}</td>
-        <td>{{ company.type }}</td>
-        <td>{{ company.sauda }}</td>
+          <td>₹{{ company.price }}</td>
+          <td>{{ company.gmp }}</td>
+          <td>{{ company.gain }}%</td>
+          <td>{{ company.date }}</td>
+          <td>{{ company.type }}</td>
+          <td>{{ company.sauda }}</td>
       </tr>
       {% empty %}
       <tr>
-        <td colspan="18">No companies found.</td>
+        <td colspan="7">No companies found.</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -125,5 +129,4 @@
 </div>
 </body>
 </html>
-​
-​
+
