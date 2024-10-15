@@ -1,101 +1,129 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
+  <title>IPO Radar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
   <style>
     /* Sticky first column */
-    .tableFixHead        { padding: auto; }
-    thead                { z-index: 10; }
-    table                { border-collapse: collapse; overflow: auto; }
-    .sticky-col          { position: sticky; left: 0; z-index: 9; }
-    thead th:first-child {z-index: 11;}
-  </style>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-<script>
-  $.fn.dataTable.ext.type.order['currency-pre'] = function(data) {
-    return parseFloat(data.replace(/[₹,–\s]/g, '').trim()) || 0;// Remove ₹, commas, and any special characters like en dashes or spaces
-  };
+    thead {
+      z-index: 110;
+    }
 
-  $(document).ready(function() {
-    $('table').DataTable({"searching": false, "lengthChange": false, "paging": false, "info": false,
-    "columnDefs": [{ "type": "currency", "targets": [2,6] }] });
-  });
-</script>
+    table {
+      border-collapse: collapse;
+      overflow: auto;
+      position: relative;
+      padding: auto;
+    }
+
+    .sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 109;
+    }
+
+    thead th:first-child {
+      z-index: 111;
+    }
+  </style>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+  <script>
+    $.fn.dataTable.ext.type.order['currency-pre'] = function (data) {
+      return parseFloat(data.replace(/[₹,–\s]/g, '').trim()) || 0;// Remove ₹, commas, and any special characters like en dashes or spaces
+    };
+
+    $(document).ready(function () {
+      $('table').DataTable({
+        "searching": false, "lengthChange": false, "paging": false, "info": false,
+        "columnDefs": [{ "type": "currency", "targets": [2, 7] }]
+      });
+    });
+  </script>
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-  <div class="container-fluid">
-    <div class="navbar-brand">
-      <h2>IPO Details</h2>
+  <div>
+    <div class="sticky-top">
+      <nav class="navbar navbar-expand-sm navbar-dark bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+          <div class="navbar-brand">
+            <h2>IPO Details</h2>
+          </div>
+          <div class="">
+            <form class="" role="search" action="{% url 'populate_data' %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-outline-light" type="submit">Update</button>
+            </form>
+          </div>
+        </div>
+      </nav>
     </div>
-    <div class="">
-      <form class="d-flex" role="search" action="{% url 'populate_data' %}" method="post">
-        {% csrf_token %}
-        <button class = "btn btn-outline-light" type="submit">Update</button>
-      </form>
+
+    <div class="mt-5 tableFixHead">
+      <table class="table table-responsive table-hover">
+        <thead class="sticky-top">
+          <tr>
+            <th class="sticky-col">Company</th>
+            <th>Price</th>
+            <th>GMP</th>
+            <th>Gain</th>
+            <th>Changed</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Sauda</th>
+            <th>Qty</th>
+            <th>QI</th>
+            <th>RI</th>
+            <th>NI</th>
+            <th>SHNI</th>
+            <th>BHNI</th>
+            <th>Total Subs</th>
+            <th>Closing</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for company in companies %}
+          <tr>
+            <td class="sticky-col">{{ company.companies }}</td>
+            <td>₹{{ company.price }}</td>
+            <td>{{ company.gmp }}</td>
+            <td>{{ company.gain }}%</td>
+            <td>{{ company.changed }}</td>
+            <td>{{ company.date }}</td>
+            <td>{{ company.type }}</td>
+            <td>{{ company.sauda }}</td>
+            <td>{{ company.qty }}</td>
+            <td>{{ company.qi }}</td>
+            <td>{{ company.ri }}</td>
+            <td>{{ company.ni }}</td>
+            <td>{{ company.shni }}</td>
+            <td>{{ company.bhni }}</td>
+            <td>{{ company.total_sub }}</td>
+            <td>{{ company.closing }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="17">No companies found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-  </div>
-</nav>
-  
-  <div class="mt-5 tableFixHead">
-    <table class = "table table-hover">
-      <thead class="sticky-top">
-        <tr>
-          <th class="sticky-col">Company</th>
-          <th>Price</th>
-          <th>GMP</th>
-          <th>Gain</th>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Sauda</th>
-          <th>Qty</th>
-          <th>QI</th>
-          <th>RI</th>
-          <th>NI</th>
-          <th>SHNI</th>
-          <th>BHNI</th>
-          <th>Total Subs</th>
-          <th>Closing</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for company in companies %}
-        <tr>
-          <td class="sticky-col">{{ company.companies }}</td>
-          <td>₹{{ company.price }}</td>
-          <td>{{ company.gmp }}</td>
-          <td>{{ company.gain }}%</td>
-          <td>{{ company.date }}</td>
-          <td>{{ company.type }}</td>
-          <td>{{ company.sauda }}</td>
-          <td>{{ company.qty }}</td>
-          <td>{{ company.qi }}</td>
-          <td>{{ company.ri }}</td>
-          <td>{{ company.ni }}</td>
-          <td>{{ company.shni }}</td>
-          <td>{{ company.bhni }}</td>
-          <td>{{ company.total_sub }}</td>
-          <td>{{ company.closing }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="16">No companies found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <h4 class="container-fluid mt-5">Partial data available</h4>
+    <!-- <h4 class="container-fluid mt-5">Partial data available</h4>
   <div class="tableFixHead mt-5">
     <table class = "table table-hover">
       <thead class="sticky-top">
@@ -104,6 +132,7 @@
           <th>Price</th>
           <th>GMP</th>
           <th>Gain</th>
+          <th>Changed</th>
           <th>Date</th>
           <th>Type</th>
           <th>Sauda</th>
@@ -115,6 +144,7 @@
           <td>₹{{ company.price }}</td>
           <td>{{ company.gmp }}</td>
           <td>{{ company.gain }}%</td>
+          <td>{{ company.changed }}</td>
           <td>{{ company.date }}</td>
           <td>{{ company.type }}</td>
           <td>{{ company.sauda }}</td>
@@ -126,7 +156,8 @@
       {% endfor %}
     </tbody>
   </table>
-</div>
+</div> -->
+  </div>
 </body>
-</html>
 
+</html>

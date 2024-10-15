@@ -10,15 +10,14 @@ from .tabular import extractor
 
 # Create your views here.
 def index(request):
-   qs = company.objects.filter(qty__isnull=False).exclude(qty = '').values()
-   partialqs = company.objects.filter(qty = '').values()
-   # data = pd.DataFrame(qs).drop(['id'],axis=1)
+   # qs = company.objects.filter(qty__isnull=False).exclude(qty = '').values()
+   # partialqs = company.objects.filter(qty = '').values()
+   qs = company.objects.all().values()
    if not qs.exists():
       return populate_data(request)
    context = {
-      # 'df':data.to_html(index=False, classes='my-table'),
       'companies':qs,
-      'partial':partialqs
+      # 'partial':partialqs
    }
    return render(request, 'index.html', context)
 
@@ -32,6 +31,7 @@ def populate_data(request):
             price=row['Price'] if not pd.isna(row['Price']) else 0,
             gmp=row['GMP'] if not pd.isna(row['GMP']) else '-',
             gain=row['Gain(%)'] if not pd.isna(row['Gain(%)']) else 0,
+            changed=row['Changed'] if not pd.isna(row['Changed']) else '',
             date=row['Date'] if not pd.isna(row['Date']) else '-',
             type=row['Type'] if not pd.isna(row['Type']) else '',
             sauda=row['Sauda'] if not pd.isna(row['Sauda']) else '',

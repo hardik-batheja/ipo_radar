@@ -30,11 +30,16 @@ def extractor(showme = False):
       tables = soupg.find_all('figure', class_ = 'wp-block-table')
 
       rows = tables[0].find_all('tr')
-      dfx = pd.DataFrame(columns = ['Company', 'Price', 'GMP', 'Gain(%)', 'Date', 'Type'])
+      dfx = pd.DataFrame(columns = ['Company', 'Price', 'GMP', 'Gain(%)', 'Changed', 'Date', 'Type'])
       for row in rows[1:]:
+         img = row.find('img', src=lambda x: 'arrow' in x)
+         if img and 'src' in img.attrs:
+            trend = "+" if 'up-arrow' in img['src'] else "-"
+         else:
+            trend = "="
          row = row.find_all('td')
          comp_temp,type_temp = row[0].text.split(" (")
-         dfx.loc[len(dfx)] = [comp_temp.title(), row[2].text[1:].strip(), row[1].text, pd.to_numeric(row[3].text[:-1].replace('-','0')), row[5].text, type_temp.rstrip(")")]
+         dfx.loc[len(dfx)] = [comp_temp.title(), row[3].text[1:].strip(), row[1].text, pd.to_numeric(row[4].text[:-1].replace('-','0')), trend, row[6].text, type_temp.rstrip(")")]
       dfx['Type'] = dfx['Type'].replace({"Mainline":"Main","NSE SME":"SME","BSE SME":"SME"})
 
       rows = tables[1].find_all('tr')
@@ -60,4 +65,4 @@ def extractor(showme = False):
       print("Status Code:", response.status_code)
    return dfx
 
-#extractor(True)
+# extractor(True)

@@ -6,6 +6,7 @@ class company(models.Model):
    price = models.CharField(max_length=100, blank=True)
    gmp = models.CharField(max_length=100, blank=True, default= "₹0")
    gain = models.FloatField(blank=True, default = 0)
+   changed = models.CharField(max_length=100, blank=True, default= "")
    date = models.CharField(max_length=100, blank=True)
    type = models.CharField(max_length=100, blank=True)
    sauda = models.CharField(max_length=100, blank=True, default="₹0")
